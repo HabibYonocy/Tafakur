@@ -5,6 +5,7 @@ import {
   getSceneAtTime,
   sceneDurations,
   getActiveTypography,
+  preloadImages,
 } from './videoEngine';
 import { scenes } from './data';
 
@@ -24,6 +25,7 @@ export default function VideoPlayer() {
   const [recordProgress, setRecordProgress] = useState(0);
   const [downloadUrl, setDownloadUrl] = useState<string | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [imagesLoaded, setImagesLoaded] = useState(false);
 
   const canvasWidth = 1280;
   const canvasHeight = 720;
@@ -40,6 +42,14 @@ export default function VideoPlayer() {
   // Initial render
   useEffect(() => {
     renderFrame(0);
+  }, [renderFrame]);
+
+  // Preload images
+  useEffect(() => {
+    preloadImages().then(() => {
+      setImagesLoaded(true);
+      renderFrame(currentTimeRef.current);
+    });
   }, [renderFrame]);
 
   // Playback loop
@@ -220,6 +230,16 @@ export default function VideoPlayer() {
           className="w-full h-auto block"
         />
         
+        {/* Loading overlay */}
+        {!imagesLoaded && (
+          <div className="absolute inset-0 flex items-center justify-center bg-black/80">
+            <div className="text-center">
+              <div className="w-12 h-12 border-4 border-gold-400/30 border-t-gold-400 rounded-full animate-spin mx-auto mb-4"></div>
+              <p className="text-gray-300 text-sm">در حال بارگذاری تصاویر...</p>
+            </div>
+          </div>
+        )}
+
         {/* Overlay info */}
         {playbackState === 'recording' && (
           <div className="absolute top-4 left-4 flex items-center gap-2 bg-red-600/90 px-3 py-1.5 rounded-lg">
@@ -230,7 +250,7 @@ export default function VideoPlayer() {
         )}
 
         {/* Play button overlay when idle */}
-        {playbackState === 'idle' && currentTime === 0 && (
+        {playbackState === 'idle' && currentTime === 0 && imagesLoaded && (
           <button
             onClick={play}
             className="absolute inset-0 flex items-center justify-center bg-black/30 hover:bg-black/40 transition-colors group"
