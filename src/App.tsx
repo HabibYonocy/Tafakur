@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { scenes, typographySchedule, colorJourney, checklist, narrativeText } from './data';
+import VideoPlayer from './VideoPlayer';
 
 function App() {
   const [activeSection, setActiveSection] = useState('hero');
@@ -8,7 +9,7 @@ function App() {
 
   useEffect(() => {
     const handleScroll = () => {
-      const sections = ['hero', 'overview', 'narrative', 'scenes', 'typography', 'color', 'checklist'];
+      const sections = ['hero', 'video', 'overview', 'narrative', 'scenes', 'typography', 'color', 'checklist'];
       for (const section of sections) {
         const el = document.getElementById(section);
         if (el) {
@@ -47,6 +48,7 @@ function App() {
             <div className="flex items-center gap-1 sm:gap-4 text-xs sm:text-sm overflow-x-auto">
               {[
                 { id: 'hero', label: 'خانه' },
+                { id: 'video', label: '🎬 ویدیو' },
                 { id: 'overview', label: 'مشخصات' },
                 { id: 'narrative', label: 'متن روایی' },
                 { id: 'scenes', label: 'صحنه‌ها' },
@@ -119,6 +121,36 @@ function App() {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
               </svg>
             </a>
+          </div>
+        </div>
+      </section>
+
+      {/* Video Player Section */}
+      <section id="video" className="py-20 px-4 bg-gradient-to-b from-cinematic-900 via-cinematic-800 to-cinematic-900">
+        <div className="max-w-6xl mx-auto">
+          <SectionTitle title="پیش‌نمایش و ساخت ویدیو" subtitle="پخش، ضبط و دانلود ویدیوی ۶۹ ثانیه‌ای" />
+          
+          <div className="mt-12">
+            <VideoPlayer />
+          </div>
+
+          {/* Video Features */}
+          <div className="mt-12 grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div className="glass-card rounded-xl p-5 text-center">
+              <div className="text-3xl mb-2">🎬</div>
+              <h4 className="text-sm font-bold text-white mb-1">۱۱ صحنه سینمایی</h4>
+              <p className="text-xs text-gray-400">از مسیر سنگلاخی تا بهار سبز</p>
+            </div>
+            <div className="glass-card rounded-xl p-5 text-center">
+              <div className="text-3xl mb-2">✨</div>
+              <h4 className="text-sm font-bold text-white mb-1">متن‌های فارسی متحرک</h4>
+              <p className="text-xs text-gray-400">با فونت وزیرمتن و انیمیشن نرم</p>
+            </div>
+            <div className="glass-card rounded-xl p-5 text-center">
+              <div className="text-3xl mb-2">🎨</div>
+              <h4 className="text-sm font-bold text-white mb-1">مسیر رنگ کامل</h4>
+              <p className="text-xs text-gray-400">از تاریکی تا نور طلایی و سبز</p>
+            </div>
           </div>
         </div>
       </section>
